@@ -30,30 +30,20 @@ char *get_input()
 	return (user_input);
 }
 /**
- *handle_non_interactive_mode - handles non-interactive mode
- *@paths: paths
+ *_strdup - duplicates a string
+ *@str: the string.
  *
- *Return: void
+ *Return: dup
  */
-void handle_non_interactive_mode(char **paths)
+char *_strdup(const char *str)
 {
-	char *command;
-	char **args, *cmd_path;
+	size_t len;
+	char *dup;
 
-	command = "/bin/ls";
+	len = string_length(str) + 1;
+	dup = malloc(len);
 
-	args = input_tokenizer(command);
-	cmd_path = find_command(args[0], paths);
-
-	if (cmd_path == NULL)
-	{
-		write(STDOUT_FILENO, "No such file or dirctory\n", 26);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		execute_command(cmd_path, args);
-	}
-
-	free(args);
+	if (dup != NULL)
+		strcpy(dup, str);
+	return (dup);
 }

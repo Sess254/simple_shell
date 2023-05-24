@@ -18,7 +18,7 @@ char *find_command(char *cmd, char **paths)
 	{
 		if (access(cmd, X_OK) == 0)
 		{
-			result = strdup(cmd);
+			result = _strdup(cmd);
 			if (!result)
 			{
 				perror("Memory allocation error");
