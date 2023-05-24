@@ -10,6 +10,8 @@
 
 #define BUFFER_SIZE 1024
 
+extern char **environ;
+
 /** String Functions for Copy, concatenate, length and compare*/
 char *strcpy(char *dest, const char *src);
 char *strcat(char *dest, const char *src);
