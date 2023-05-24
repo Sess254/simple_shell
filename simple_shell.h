@@ -21,9 +21,11 @@ int strcmp(const char *str1, const char *str2);
 /*Function to get the environment*/
 char *getenv(const char *name);
 
-/* Function to check if the input is from a terminal
-int is_terminal();
-*/
+/*
+ * Function to check if the input is from a terminal
+ * int is_terminal();
+ */
+
 /* Function to read user input from stdin*/
 char *get_input();
 
