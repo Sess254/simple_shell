@@ -19,11 +19,11 @@ char *strcpy(char *dest, const char *src)
 /**
  *strcat - concatenates a string
  *@dest: destination
- *@str: string
+ *@src: source
  *
  *Return: concatenated string
  */
-char *strcat(char *dest, const char *str)
+char *strcat(char *dest, const char *src)
 {
 	char *cat = dest;
 
@@ -59,12 +59,40 @@ size_t string_length(const char *str)
  * - if str1 is less than str2
  * + if str1 is greater than str2
  */
-int strcmp(const char *str1, const char str2)
+int strcmp(const char *str1, const char *str2)
 {
-	while (*str1 && (*str1 == str2))
+	while (*str1 && (*str1 == *str2))
 	{
 		str1++;
 		str2++;
 	}
 	return (*(unsigned char *)str1 - *(unsigned char *)str2);
+}
+/**
+ *strncmp - compares two strings upto a specified number of characters
+ *@s1: It is a pointer to the first string to be compared.
+ *@s2: It is a pointer to the second string to be compared.
+ *@c: It specifies the maximum number of characters to compare.
+ *
+ *Return: 0 on success
+ *- s1 < s2
+ *+ s1 > s2
+ */
+int strncmp(const char *s1, const char *s2, size_t c)
+{
+	while (c > 0)
+	{
+		if (*s1 != *s2)
+	{
+		return (*s1 - *s2);
+	}
+		if (*s1 == '\0')
+		{
+			break;
+		}
+		s1++;
+		s2++;
+		c--;
+	}
+	return (0);
 }
