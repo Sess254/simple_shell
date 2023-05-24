@@ -12,6 +12,23 @@ char *find_command(char *cmd, char **paths)
 	char *path;
 	char *full_path;
 	int i = 0;
+	char *result;
+
+	if (cmd[0] == '/')
+	{
+		if (access(cmd, X_OK) == 0)
+		{
+			result = strdup(cmd);
+			if (!result)
+			{
+				perror("Memory allocation error");
+				exit(EXIT_FAILURE);
+			}
+			return (result);
+		}
+		return (NULL);
+	}
+
 
 	full_path = malloc(BUFFER_SIZE);
 

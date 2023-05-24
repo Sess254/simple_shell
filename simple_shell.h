@@ -11,6 +11,7 @@
 #define BUFFER_SIZE 1024
 
 extern char **environ;
+void handle_non_interactive_mode(char **paths);
 
 /** String Functions for Copy, concatenate, length and compare*/
 char *strcpy(char *dest, const char *src);

@@ -38,7 +38,7 @@ int main(void)
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
-			write(STDOUT_FILENO, "No such file or directory \n", 25);
+			write(STDOUT_FILENO, "No such file or directory\n", 26);
 		}
 		else
 		{
