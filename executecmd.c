@@ -15,7 +15,7 @@ void execute_command(char *cmd_path, char **args)
 	int status;
 
 /*Forking the child process*/
-	child_process = fork()
+	child_process = fork();
 	if (child_process == -1)
 	{
 		perror("Failed to fork");
