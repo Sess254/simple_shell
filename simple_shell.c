@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 	{
 		user_input = get_input();
 		/*Exit the shell when the user types exit*/
-		if (strcmp(user_input, "exit") == 0)
+		if (_strcmp(user_input, "exit") == 0)
 		{
 			break;
 		}
@@ -38,9 +38,9 @@ int main(int argc, char **argv)
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
-			write(STDOUT_FILENO, argv[0], strlen(argv[0]));
+			write(STDOUT_FILENO, argv[0], string_length(argv[0]));
 			write(STDOUT_FILENO, ": ", 2);
-			write(STDOUT_FILENO, error_message, strlen(error_message));
+			write(STDOUT_FILENO, error_message, string_length(error_message));
 		}
 		else
 		{

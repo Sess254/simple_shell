@@ -34,9 +34,9 @@ char *find_command(char *cmd, char **paths)
 
 	while ((path = paths[i++]) != NULL)
 	{
-		strcpy(full_path, path);
-		strcat(full_path, "/");
-		strcat(full_path, cmd);
+		_strcpy(full_path, path);
+		_strcat(full_path, "/");
+		_strcat(full_path, cmd);
 
 		if (access(full_path, X_OK) == 0)
 		{

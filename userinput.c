@@ -20,7 +20,7 @@ char *get_input()
 	if (length_of_input == -1)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		perror("No such file or directory \n");
+		perror("No such file or directory\n");
 		write(STDOUT_FILENO, "\n", 1); /*Push the prompt to a new line*/
 		exit(EXIT_FAILURE);
 	}
