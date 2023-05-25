@@ -19,14 +19,12 @@ char *get_input()
 	length_of_input = getline(&user_input, &size_of_input, stdin);
 	if (length_of_input == -1)
 	{
-		write(STDOUT_FILENO, "\n", 1);
-		perror("No such file or directory\n");
-		write(STDOUT_FILENO, "\n", 1); /*Push the prompt to a new line*/
+		write(STDOUT_FILENO, "\n", 1);/* Push the prompt to a new line*/
+		perror(" ");
 		exit(EXIT_FAILURE);
 	}
 	/*Remove the newline character at the end*/
-	if (length_of_input > 0 && user_input[length_of_input - 1] == '\n')
-		user_input[length_of_input - 1] = '\0';
+	user_input[length_of_input - 1] = '\0';
 	return (user_input);
 }
 /**

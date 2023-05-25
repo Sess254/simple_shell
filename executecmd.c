@@ -9,7 +9,7 @@
  */
 
 
-void execute_command(char *cmd_path, char **args)
+void execute_command(char *cmd_path, char **args, char **evnp)
 {
 	pid_t child_process;
 	int status;
@@ -24,7 +24,7 @@ void execute_command(char *cmd_path, char **args)
 	else if (child_process == 0)
 	{
 /* Execute command using exceve*/
-		if (execve(cmd_path, args, NULL) == -1)
+		if (execve(cmd_path, args, evnp) == -1)
 		{
 			perror("Failed to execute");
 			exit(EXIT_FAILURE);

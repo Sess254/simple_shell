@@ -21,10 +21,11 @@ char *find_command(char *cmd, char **paths)
 			result = _strdup(cmd);
 			if (!result)
 			{
-				perror("Memory allocation error");
+				perror(" ");
 				exit(EXIT_FAILURE);
 			}
 			return (result);
+			free(result);
 		}
 		return (NULL);
 	}

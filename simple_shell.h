@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 #define BUFFER_SIZE 1024
 
@@ -39,6 +40,6 @@ char **input_tokenizer(char *user_input);
 char *find_command(char *cmd, char **paths);
 
 /* Function to execute the command*/
-void execute_command(char *cmd_path, char **args);
+void execute_command(char *cmd_path, char **args, char **envp);
 
 #endif

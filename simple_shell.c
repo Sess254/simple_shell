@@ -9,13 +9,13 @@
  * strcmp: function to compare the user input with exit command
  * Return: On sucess, 0.
  */
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **envp)
 {
 	char *user_input, **args, *path, *cmd_path, *path_env, **paths;
-	char *error_message = "No such file or directory\n";
 	int count = 0;/*count of path*/
-	(void)argc;
 	path_env = getenv("PATH");
+	(void)argc;
+	(void)argv;
 	paths = malloc(BUFFER_SIZE * sizeof(char *));
 	path = strtok(path_env, ":");
 	while (path != NULL)
@@ -31,20 +31,18 @@ int main(int argc, char **argv)
 		/*Exit the shell when the user types exit*/
 		if (_strcmp(user_input, "exit") == 0)
 		{
-			break;
+			exit(0);
 		}
 		args = input_tokenizer(user_input);
 		/*Command in the paths search*/
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
-			write(STDOUT_FILENO, argv[0], string_length(argv[0]));
-			write(STDOUT_FILENO, ": ", 2);
-			write(STDOUT_FILENO, error_message, string_length(error_message));
+			perror("hsh ");
 		}
 		else
 		{
-			execute_command(cmd_path, args);
+			execute_command(cmd_path, args, envp);
 		}
 		free(user_input);
 		free(args);
