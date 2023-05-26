@@ -19,13 +19,18 @@ char *get_input()
 	length_of_input = getline(&user_input, &size_of_input, stdin);
 	if (length_of_input == -1)
 	{
-		write(STDOUT_FILENO, "\n", 1);/* Push the prompt to a new line*/
-		perror(" ");
+		/* write(STDOUT_FILENO, "\n", 1); Push the prompt to a new line*/
 		exit(EXIT_FAILURE);
 	}
 	/*Remove the newline character at the end*/
-	user_input[length_of_input - 1] = '\0';
+	size_of_input = string_length(user_input);
+	if (size_of_input > 0 && user_input[size_of_input - 1] == '\n')
+	{
+		user_input[size_of_input - 1] = '\0';
+	}
+	/* user_input[length_of_input - 1] = '\0';*/
 	return (user_input);
+	free(user_input);
 }
 /**
  *_strdup - duplicates a string

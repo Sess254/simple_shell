@@ -28,25 +28,29 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		user_input = get_input();
+		fflush(stdout);
 		/*Exit the shell when the user types exit*/
-		if (_strcmp(user_input, "exit") == 0)
+		if (_strcmp(user_input,"exit") == 0)
 		{
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 		args = input_tokenizer(user_input);
 		/*Command in the paths search*/
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
-			perror("hsh ");
+			break;
 		}
 		else
 		{
 			execute_command(cmd_path, args, envp);
 		}
 		free(user_input);
+		free(cmd_path);
 		free(args);
 	}
 	free(paths);
+	free(path);
+	free(path_env);
 	return (0);
 }
