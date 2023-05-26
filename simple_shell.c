@@ -35,6 +35,7 @@ int main(int argc, char **argv, char **envp)
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
+			free(args);
 			continue;
 
 		}
@@ -42,8 +43,8 @@ int main(int argc, char **argv, char **envp)
 		{
 			execute_command(cmd_path, args, envp);
 		}
-		free(cmd_path), free(args);
+		free(user_input), free(cmd_path), free(args);
 	}
-	free(path), free(path_env);
+	free(path), free(args), free(path_env);
 	return (0);
 }

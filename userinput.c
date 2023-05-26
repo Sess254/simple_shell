@@ -16,6 +16,7 @@ void free_array(char **array)
 
 /**
  * get_input - Function to read user input
+ * @paths: path
  *
  * Return: On success,return the number of characters read
  */

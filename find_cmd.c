@@ -43,6 +43,8 @@ char *find_command(char *cmd, char **paths)
 			return (full_path);
 		}
 	}
+	free(cmd);
 	free(full_path);
+	perror("./hsh");
 	return (NULL);
 }
