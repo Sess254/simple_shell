@@ -4,7 +4,7 @@
  * execute_command - Function to execute the user input command
  * @cmd_path: Command path
  * @args: Command arguments
- *
+ * @evnp: Enviroment
  * Return: On success, return NULL
  */
 
@@ -19,7 +19,6 @@ void execute_command(char *cmd_path, char **args, char **evnp)
 	if (child_process == -1)
 	{
 		perror("Failed to fork");
-		exit(EXIT_FAILURE);
 	}
 	else if (child_process == 0)
 	{
@@ -27,7 +26,7 @@ void execute_command(char *cmd_path, char **args, char **evnp)
 		if (execve(cmd_path, args, evnp) == -1)
 		{
 			perror("Failed to execute");
-			exit(EXIT_FAILURE);
+			/*exit(EXIT_FAILURE);*/
 		}
 /* exit(EXIT_SUCCESS);*/
 	}
