@@ -25,7 +25,7 @@ int main(int argc, char **argv, char **envp)
 	paths[count] = NULL;
 	while (1)
 	{
-		user_input = get_input();
+		user_input = get_input(paths);
 		fflush(stdout);
 		if (_strcmp(user_input, "exit") == 0)
 		{
@@ -35,14 +35,16 @@ int main(int argc, char **argv, char **envp)
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
+			free(user_input);
 			continue;
+
 		}
 		else
 		{
 			execute_command(cmd_path, args, envp);
 		}
-		free(user_input), free(cmd_path), free(args);
+		free(cmd_path), free(args);
 	}
-	free(paths), free(path), free(path_env);
+	free(path), free(path_env);
 	return (0);
 }

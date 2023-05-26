@@ -32,7 +32,7 @@ char *getenv(const char *name);
  */
 
 /* Function to read user input from stdin*/
-char *get_input();
+char *get_input(char **paths);
 
 /* Function to tokenize the user input*/
 char **input_tokenizer(char *user_input);

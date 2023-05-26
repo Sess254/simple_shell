@@ -25,7 +25,6 @@ char *find_command(char *cmd, char **paths)
 				exit(EXIT_FAILURE);
 			}
 			return (result);
-			free(result);
 		}
 		return (NULL);
 	}
