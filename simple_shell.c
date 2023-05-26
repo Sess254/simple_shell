@@ -35,7 +35,6 @@ int main(int argc, char **argv, char **envp)
 		cmd_path = find_command(args[0], paths);
 		if (cmd_path == NULL)
 		{
-			free(user_input);
 			continue;
 
 		}

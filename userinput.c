@@ -1,6 +1,20 @@
 #include "simple_shell.h"
 
 /**
+ *free_array - frees memory for arrays
+ *@array: array
+ *Return: none
+ */
+void free_array(char **array)
+{
+	int i = 0;
+
+	for (i = 0; array[i]; i++)
+		free(array[i]);
+	free(array);
+}
+
+/**
  * get_input - Function to read user input
  *
  * Return: On success,return the number of characters read
@@ -17,16 +31,19 @@ char *get_input(char **paths)
 		write(STDOUT_FILENO, "$ ", 2);
 	}
 	length_of_input = getline(&user_input, &size_of_input, stdin);
-	if (length_of_input == -1 && EOF)
+	if (length_of_input == -1)
 	{
 		/* write(STDOUT_FILENO, "\n", 1); Push the prompt to a new line*/
 		free(user_input);
 		free(paths);
 		exit(EXIT_FAILURE);
 	}
-	if (EOF)
+	if (length_of_input == -1 && EOF)
 	{
+		/* write(STDOUT_FILENO, "\n", 1); Push the prompt to a new line*/
 		free(user_input);
+		free_array(paths);
+		exit(EXIT_FAILURE);
 	}
 	/*Remove the newline character at the end*/
 	size_of_input = string_length(user_input);
