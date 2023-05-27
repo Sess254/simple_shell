@@ -1,68 +1,71 @@
 #ifndef SIMPLE_SHELL_H
 #define SIMPLE_SHELL_H
 
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <stdarg.h>
 #include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
 #include <errno.h>
+#include <strings.h>
 #include <stddef.h>
-#include <sys/stat.h>
+#include <dirent.h>
 #include <signal.h>
 
+/**
+ * struct builtins - struct with builtin commands
+ * @argv: arg passed as command
+ * @func: correlations function
+ * description: this is to handle the builtins
+ */
+typedef struct builtins
+{
+	char *argv;
+	int (*func)();
+} builtins;
+
+char **tokenize(char *userinput);
+
+int stringlength(char *s);
+
+int shell_loop(int argc, char **argv);
+
+int executor(char *asdf, char **argv);
+
+int function_finder(char **argv, char *buffer);
+
+int sh_exit(char **argv, char *buffer);
+
+int sh_cd(char **argv);
+
+int sh_env(void);
+
+char *_strcat(char *dest, char *src);
+
+char *dir_search(char **argv, char **path_tokens);
+
+int _strcmp(char *s1, char *s2);
+
+char *executable_maker(char *asdf, char **argv);
+
+void dub_free(char **dub_pointer);
+
 int _putchar(char c);
-void _puts(char *str);
-int _strlen(char *s);
+
+char _strchr(char *s, char c);
+
 char *_strdup(char *str);
-char *concat_all(char *name, char *sep, char *value);
 
-char **splitstring(char *str, const char *delim);
-void execute(char **argv);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+char **_env_parser(char *name);
 
+char **_get_env(char *env);
 
 extern char **environ;
 
-/**
- * struct list_path - Linked list containing PATH directories
- * @dir: directory in path
- * @p: pointer to next node
- */
-typedef struct list_path
-{
-	char *dir;
-	struct list_path *p;
-} list_path;
+int sh_setenv(char **argv);
 
-
-char *_getenv(const char *name);
-list_path *add_node_end(list_path **head, char *str);
-list_path *linkpath(char *path);
-char *_which(char *filename, list_path *head);
-
-/**
- * struct mybuild - pointer to function with corresponding buildin command
- * @name: buildin command
- * @func: execute the buildin command
- */
-typedef struct mybuild
-{
-	char *name;
-	void (*func)(char **);
-} mybuild;
-
-void(*checkbuild(char **arv))(char **arv);
-int _atoi(char *s);
-void exitt(char **arv);
-void env(char **arv);
-void _setenv(char **arv);
-void _unsetenv(char **arv);
-
-void freearv(char **arv);
-void free_list(list_path *head);
-
+int sh_unsetenv(char **argv);
 
 #endif
-

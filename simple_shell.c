@@ -1,89 +1,167 @@
 #include "simple_shell.h"
 
 /**
- * sig_handler - checks if Ctrl C is pressed
- * @sig_num: int
+ * main - main function
+ * @argc: argc
+ * @argv: argv
+ * Return: 0
  */
-void sig_handler(int sig_num)
+int main(int argc, char **argv)
 {
-	if (sig_num == SIGINT)
-	{
-		_puts("\n$ ");
-	}
+	shell_loop(argc, argv);
+	return (0);
 }
 
 /**
-* _EOF - handles the End of File
-* @len: return value of getline function
-* @buff: buffer
+ * shell_loop - constantly run the shell
+ * @argc: argc
+ * @argv: argv
+ * Return: 0
  */
-void _EOF(int len, char *buff)
+int shell_loop(int argc, char **argv)
 {
-	(void)buff;
-	if (len == -1)
+	int userinput;
+	char *buffer = NULL;
+	size_t bufsize;
+	char *prompt = "$ ";
+	char **path_tokens = NULL;
+	char *executable = NULL;
+
+	(void) argc;
+
+	buffer = NULL;
+	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 		{
-			_puts("\n");
-			free(buff);
+			write(STDOUT_FILENO, prompt, stringlength(prompt));
 		}
-		exit(0);
+		userinput = getline(&buffer, &bufsize, stdin);
+		if (userinput == -1)
+			break;
+		argv = tokenize(buffer);
+		if (argv[0] == NULL)
+			continue;
+		if (function_finder(argv, buffer) == 1)
+		{
+			free(argv);
+			continue;
+		}
+		path_tokens = _get_env("PATH");
+		executable = dir_search(argv, path_tokens);
+		executor(executable, argv);
+		dub_free(path_tokens);
+		if (argv[0][0] != '/')
+			free(executable);
+		free(argv);
 	}
+	free(buffer);
+return (0);
 }
-/**
-  * _isatty - verif if terminal
-  */
 
-void _isatty(void)
-{
-	if (isatty(STDIN_FILENO))
-		_puts("$ ");
-}
 /**
- * main - Shell
- * Return: 0 on success
+ * tokenize - tokenize user input
+ * description: to breakdown command
+ * @userinput: userinput
+ * Return: 0
+ */
+char **tokenize(char *userinput)
+{
+	int token_inc = 0;
+	char *tokenize = NULL;
+	char **argv = NULL;
+	int tokencount = 0;
+	int i;
+
+	strtok(userinput, "\n");
+	for (i = 0; userinput[i] != '\0'; i++)
+	{
+		if (userinput[i] == ' ')
+		{
+			tokencount++;
+		}
+	}
+	argv = malloc(8 * (tokencount + 2));
+	if (argv != NULL)
+	{
+		token_inc = 0;
+		tokenize = strtok(userinput, " ");
+		while (token_inc < (tokencount + 1))
+		{
+			argv[token_inc] = tokenize;
+			tokenize = strtok(NULL, " ");
+			token_inc++;
+		}
+		argv[token_inc] = NULL;
+	}
+
+	/*free(userinput);*/
+	return (argv);
+}
+
+/**
+ * executor - executes the command given
+ * description: by forking and execing
+ * @asdf: asdf
+ * @argv: argv
+ * Return: 0
  */
 
-int main(void)
+int executor(char *asdf, char **argv)
 {
-	ssize_t len = 0;
-	char *buff = NULL, *value, *pathname, **arv;
-	size_t size = 0;
-	list_path *head = '\0';
-	void (*f)(char **);
+	pid_t child_pid;
 
-	signal(SIGINT, sig_handler);
-	while (len != EOF)
+	child_pid = fork();
+	if (child_pid == -1)
+		perror("Fork failure\n");
+	if (child_pid == 0)
 	{
-		_isatty();
-		len = getline(&buff, &size, stdin);
-		_EOF(len, buff);
-		arv = splitstring(buff, " \n");
-		if (!arv || !arv[0])
-			execute(arv);
-		else
+		execve(asdf, argv, environ);
+	}
+	else
+	{
+		wait(NULL);
+	}
+	/*free(argv);*/
+	return (0);
+}
+
+
+/**
+ * function_finder - for builtins
+ * description: searches and compares to see if the command is a builtin
+ * @argv: argv
+ * @buffer: buffer
+ * Return: 0
+ */
+int function_finder(char **argv, char *buffer)
+{
+	int i;
+
+	builtins arr[] = {
+		{"cd", sh_cd},
+		{"env", sh_env},
+		{"exit", sh_exit},
+		{"setenv", sh_setenv},
+		{"unsetenv", sh_unsetenv},
+		{'\0', NULL}
+	};
+
+	if (argv != NULL)
+	{
+		if (_strcmp(argv[0], "exit") == 0)
 		{
-			value = _getenv("PATH");
-			head = linkpath(value);
-			pathname = _which(arv[0], head);
-			f = checkbuild(arv);
-			if (f)
+			sh_exit(argv, buffer);
+			return (1);
+		}
+		for (i = 0; arr[i].func; i++)
+		{
+			if (_strcmp(argv[0], arr[i].argv) == 0)
 			{
-				free(buff);
-				f(arv);
-			}
-			else if (!pathname)
-				execute(arv);
-			else if (pathname)
-			{
-				free(arv[0]);
-				arv[0] = pathname;
-				execute(arv);
+				arr[i].func();
+				return (1);
 			}
 		}
 	}
-	free_list(head);
-	freearv(arv);
-	free(buff);
 	return (0);
 }

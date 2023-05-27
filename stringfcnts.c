@@ -1,114 +1,85 @@
 #include "simple_shell.h"
 
 /**
- * _strdup - returns a pointer to a newly allocated space in memory, which
- * contains a copy of the string given as a parameter
- * @str: pointer to a string
- * Return: pointer to a string
- */
+ * _strcmp - compares two strings to see if they are the same
+ * @s1: string 1
+ * @s2: string 2
+ * Return: s1[i] - s2[j] on failure or 0 on success
+**/
+int _strcmp(char *s1, char *s2)
+{
+	int i = 0, j = 0;
+
+	for (; s1[i] != '\0' || s2[j] != '\0'; i++, j++)
+	{
+		if (s1[i] != s2[j])
+		{
+			return (s1[i] - s2[j]);
+		}
+	}
+return (0);
+}
+
+/**
+ * stringlength - gets the length of a string
+ * @s: a string
+ * Return: length of string
+**/
+int stringlength(char *s)
+{
+	int i;
+
+	for (i = 0; s[i] != '\0'; i++)
+	{}
+		return (i);
+}
+
+/**
+ * _strdup - duplicates a string
+ * @str: string to duplicate
+ * Return: NULL on failure or a pointer to the new string on success
+**/
 char *_strdup(char *str)
 {
-	int i, l;
-	char *new;
+	char *duplicate = NULL;
+	int i;
+	int len = 0;
 
-	if (!str)
-	{
+	if (str == NULL)
 		return (NULL);
-	}
-	for (l = 0; str[l] != '\0';)
-	{
-		l++;
-	}
-	new = malloc(sizeof(char) * l + 1);
-	if (!new)
-	{
+	for (len = 0; str[len] != '\0'; len++)
+		;
+	duplicate = malloc((len + 1) * sizeof(char));
+	if (duplicate == NULL)
 		return (NULL);
-	}
-	for (i = 0; i < l; i++)
-	{
-		new[i] = str[i];
-	}
-	new[l] = str[l];
-	return (new);
+	for (i = 0; i <= len; i++)
+		duplicate[i] = str[i];
+return (duplicate);
 }
 
 /**
- * concat_all - concats 3 strings in a newly allocated memory
- * @name: first string
- * @sep: second string
- * @value: Third string
- * Return: pointer to the new string
- */
-char *concat_all(char *name, char *sep, char *value)
-{
-	char *result;
-	int l1, l2, l3, i, k;
-
-	l1 = _strlen(name);
-	l2 = _strlen(sep);
-	l3 = _strlen(value);
-
-	result = malloc(l1 + l2 + l3 + 1);
-	if (!result)
-		return (NULL);
-
-	for (i = 0; name[i]; i++)
-		result[i] = name[i];
-	k = i;
-
-	for (i = 0; sep[i]; i++)
-		result[k + i] = sep[i];
-	k = k + i;
-
-	for (i = 0; value[i]; i++)
-		result[k + i] = value[i];
-	k = k + i;
-
-	result[k] = '\0';
-
-	return (result);
-}
-
-/**
- * _strlen - it gives the length of a string
- * @s: pointer to the string
- * Return: the length of string
- */
-int _strlen(char *s)
-{
-	int i = 0;
-
-	while (*(s + i) != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
-
-/**
- * _putchar - writes the character c to stdout
- * @c: The character to print
- *
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
- */
+ * _putchar - writes a single character
+ * @c: character to write
+ * Return: the character
+**/
 int _putchar(char c)
 {
 	return (write(1, &c, 1));
 }
 
 /**
- * _puts - prints a string
- * @str: pointer to string
- */
-
-void _puts(char *str)
+ * dub_free - frees double pointers
+ * @dub_pointer: a double pointer
+ * Return: void
+**/
+void dub_free(char **dub_pointer)
 {
 	int i = 0;
 
-	while (str[i])
+	while (dub_pointer[i])
 	{
-		_putchar(str[i]);
+		free(dub_pointer[i]);
 		i++;
 	}
+	free(dub_pointer);
 }
