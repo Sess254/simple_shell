@@ -1,3 +1,9 @@
+/*
+ *File: strngfnctn.c
+ *Auth: Sess254
+ *      SophyManwa
+ */
+
 #include "simple_shell.h"
 
 /**

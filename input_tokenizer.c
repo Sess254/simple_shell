@@ -1,3 +1,9 @@
+/*
+ *File: input_tokenizerc
+ *Auths: Sess254
+ *       SophyManwa
+ */
+
 #include "simple_shell.h"
 
 /**
@@ -36,9 +42,9 @@ char *dir_search(char **argv, char **path_tokens)
 
 /**
  * executable_maker- modifies argv[0] into an executable
- * @asdf: stores the path of the correct directory
- * @argv: argv[0] is concatenated to asdf
- * Return: modified asdf
+ * @asdf: stores the path of correct directory
+ * @argv: argv[0] concat to asdf
+ * Return: asdf
 **/
 char *executable_maker(char *asdf, char **argv)
 {

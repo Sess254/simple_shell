@@ -1,3 +1,9 @@
+/*
+ *File: get_enviroment.c
+ *Auths: Sess254
+ *       SophyManwa
+ */
+
 #include "simple_shell.h"
 
 /**
