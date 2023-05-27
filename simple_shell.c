@@ -1,50 +1,89 @@
 #include "simple_shell.h"
+
 /**
- * main - Main entry point
- * @argv: argument vector
- * @argc: argument counter
- * @envp: enviro
- * Return: On sucess, 0.
+ * sig_handler - checks if Ctrl C is pressed
+ * @sig_num: int
  */
-int main(int argc, char **argv, char **envp)
+void sig_handler(int sig_num)
 {
-	char *user_input, **args, *path, *cmd_path, *path_env, **paths;
-	int count = 0;/*count of path*/
-
-	path_env = getenv("PATH");
-	(void)argc;
-	(void)argv;
-	paths = malloc(BUFFER_SIZE * sizeof(char *));
-	path = strtok(path_env, ":");
-	while (path != NULL)
+	if (sig_num == SIGINT)
 	{
-		paths[count] = path;
-		path = strtok(NULL, ":");
-		count++;
+		_puts("\n$ ");
 	}
-	paths[count] = NULL;
-	while (1)
-	{
-		user_input = get_input(paths);
-		fflush(stdout);
-		if (_strcmp(user_input, "exit") == 0)
-		{
-			exit_shell(0);
-		}
-		args = input_tokenizer(user_input);
-		cmd_path = find_command(args[0], paths);
-		if (cmd_path == NULL)
-		{
-			free(args);
-			continue;
+}
 
+/**
+* _EOF - handles the End of File
+* @len: return value of getline function
+* @buff: buffer
+ */
+void _EOF(int len, char *buff)
+{
+	(void)buff;
+	if (len == -1)
+	{
+		if (isatty(STDIN_FILENO))
+		{
+			_puts("\n");
+			free(buff);
 		}
+		exit(0);
+	}
+}
+/**
+  * _isatty - verif if terminal
+  */
+
+void _isatty(void)
+{
+	if (isatty(STDIN_FILENO))
+		_puts("$ ");
+}
+/**
+ * main - Shell
+ * Return: 0 on success
+ */
+
+int main(void)
+{
+	ssize_t len = 0;
+	char *buff = NULL, *value, *pathname, **arv;
+	size_t size = 0;
+	list_path *head = '\0';
+	void (*f)(char **);
+
+	signal(SIGINT, sig_handler);
+	while (len != EOF)
+	{
+		_isatty();
+		len = getline(&buff, &size, stdin);
+		_EOF(len, buff);
+		arv = splitstring(buff, " \n");
+		if (!arv || !arv[0])
+			execute(arv);
 		else
 		{
-			execute_command(cmd_path, args, envp);
+			value = _getenv("PATH");
+			head = linkpath(value);
+			pathname = _which(arv[0], head);
+			f = checkbuild(arv);
+			if (f)
+			{
+				free(buff);
+				f(arv);
+			}
+			else if (!pathname)
+				execute(arv);
+			else if (pathname)
+			{
+				free(arv[0]);
+				arv[0] = pathname;
+				execute(arv);
+			}
 		}
-		free(user_input), free(cmd_path), free(args);
 	}
-	free(path), free(args), free(path_env);
+	free_list(head);
+	freearv(arv);
+	free(buff);
 	return (0);
 }

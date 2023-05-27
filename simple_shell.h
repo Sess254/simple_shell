@@ -1,46 +1,68 @@
-#ifndef simple_shell_h
-#define simple_shell_h
+#ifndef SIMPLE_SHELL_H
+#define SIMPLE_SHELL_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
+#include <string.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 #include <errno.h>
+#include <stddef.h>
+#include <sys/stat.h>
+#include <signal.h>
 
-#define BUFFER_SIZE 1024
+int _putchar(char c);
+void _puts(char *str);
+int _strlen(char *s);
+char *_strdup(char *str);
+char *concat_all(char *name, char *sep, char *value);
+
+char **splitstring(char *str, const char *delim);
+void execute(char **argv);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+
 
 extern char **environ;
-void exit_shell(int status);
-void handle_non_interactive_mode(char **paths);
 
-/** String Functions for Copy, concatenate, length and compare*/
-char *_strcpy(char *dest, const char *src);
-char *_strcat(char *dest, const char *src);
-size_t string_length(const char *str);
-int _strcmp(const char *str1, const char *str2);
-int _strncmp(const char *s1, const char *s2, size_t c);
-char *_strdup(const char *str);
-
-/*Function to get the environment*/
-char *getenv(const char *name);
-
-/*
- * Function to check if the input is from a terminal
- * int is_terminal();
+/**
+ * struct list_path - Linked list containing PATH directories
+ * @dir: directory in path
+ * @p: pointer to next node
  */
+typedef struct list_path
+{
+	char *dir;
+	struct list_path *p;
+} list_path;
 
-/* Function to read user input from stdin*/
-char *get_input(char **paths);
 
-/* Function to tokenize the user input*/
-char **input_tokenizer(char *user_input);
+char *_getenv(const char *name);
+list_path *add_node_end(list_path **head, char *str);
+list_path *linkpath(char *path);
+char *_which(char *filename, list_path *head);
 
-/* Function for command search in the provided paths*/
-char *find_command(char *cmd, char **paths);
+/**
+ * struct mybuild - pointer to function with corresponding buildin command
+ * @name: buildin command
+ * @func: execute the buildin command
+ */
+typedef struct mybuild
+{
+	char *name;
+	void (*func)(char **);
+} mybuild;
 
-/* Function to execute the command*/
-void execute_command(char *cmd_path, char **args, char **envp);
+void(*checkbuild(char **arv))(char **arv);
+int _atoi(char *s);
+void exitt(char **arv);
+void env(char **arv);
+void _setenv(char **arv);
+void _unsetenv(char **arv);
+
+void freearv(char **arv);
+void free_list(list_path *head);
+
 
 #endif
+

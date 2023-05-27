@@ -1,98 +1,114 @@
 #include "simple_shell.h"
 
 /**
- *_strcpy - copies string from src to dest
- *@dest: destination of copied string
- *@src: source of the copied string
- *
- *Return: copy
+ * _strdup - returns a pointer to a newly allocated space in memory, which
+ * contains a copy of the string given as a parameter
+ * @str: pointer to a string
+ * Return: pointer to a string
  */
-char *_strcpy(char *dest, const char *src)
+char *_strdup(char *str)
 {
-	char *copy = dest;
+	int i, l;
+	char *new;
 
-	while ((*dest++ = *src++))
-		;
-	return (copy);
-}
-
-/**
- *_strcat - concatenates a string
- *@dest: destination
- *@src: source
- *
- *Return: concatenated string
- */
-char *_strcat(char *dest, const char *src)
-{
-	char *cat = dest;
-
-	while (*dest)
-		dest++;
-	while ((*dest++ = *src++))
-		;
-	return (cat);
-}
-
-/**
- *string_length - returns length of size_t string
- *@str: string to get length of
- *
- *Return: length of said string
- */
-size_t string_length(const char *str)
-{
-	const char *s;
-
-	s = str;
-	while (*s)
-		s++;
-	return (s - str);
-}
-
-/**
- *_strcmp - compares strings
- *@str1: first string to compare
- *@str2: second string to compare to
- *
- *Return: 0 - if equal
- * - if str1 is less than str2
- * + if str1 is greater than str2
- */
-int _strcmp(const char *str1, const char *str2)
-{
-	while (*str1 && (*str1 == *str2))
+	if (!str)
 	{
-		str1++;
-		str2++;
+		return (NULL);
 	}
-	return (*(unsigned char *)str1 - *(unsigned char *)str2);
+	for (l = 0; str[l] != '\0';)
+	{
+		l++;
+	}
+	new = malloc(sizeof(char) * l + 1);
+	if (!new)
+	{
+		return (NULL);
+	}
+	for (i = 0; i < l; i++)
+	{
+		new[i] = str[i];
+	}
+	new[l] = str[l];
+	return (new);
 }
+
 /**
- *_strncmp - compares two strings upto a specified number of characters
- *@s1: It is a pointer to the first string to be compared.
- *@s2: It is a pointer to the second string to be compared.
- *@c: It specifies the maximum number of characters to compare.
- *
- *Return: 0 on success
- *- s1 < s2
- *+ s1 > s2
+ * concat_all - concats 3 strings in a newly allocated memory
+ * @name: first string
+ * @sep: second string
+ * @value: Third string
+ * Return: pointer to the new string
  */
-int _strncmp(const char *s1, const char *s2, size_t c)
+char *concat_all(char *name, char *sep, char *value)
 {
-	while (c > 0)
+	char *result;
+	int l1, l2, l3, i, k;
+
+	l1 = _strlen(name);
+	l2 = _strlen(sep);
+	l3 = _strlen(value);
+
+	result = malloc(l1 + l2 + l3 + 1);
+	if (!result)
+		return (NULL);
+
+	for (i = 0; name[i]; i++)
+		result[i] = name[i];
+	k = i;
+
+	for (i = 0; sep[i]; i++)
+		result[k + i] = sep[i];
+	k = k + i;
+
+	for (i = 0; value[i]; i++)
+		result[k + i] = value[i];
+	k = k + i;
+
+	result[k] = '\0';
+
+	return (result);
+}
+
+/**
+ * _strlen - it gives the length of a string
+ * @s: pointer to the string
+ * Return: the length of string
+ */
+int _strlen(char *s)
+{
+	int i = 0;
+
+	while (*(s + i) != '\0')
 	{
-		if (*s1 != *s2)
+		i++;
+	}
+	return (i);
+}
+
+/**
+ * _putchar - writes the character c to stdout
+ * @c: The character to print
+ *
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
+ */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}
+
+/**
+ * _puts - prints a string
+ * @str: pointer to string
+ */
+
+void _puts(char *str)
+{
+	int i = 0;
+
+	while (str[i])
 	{
-		return (*s1 - *s2);
+		_putchar(str[i]);
+		i++;
 	}
-		if (*s1 == '\0')
-		{
-			break;
-		}
-		s1++;
-		s2++;
-		c--;
-	}
-	return (0);
 }
